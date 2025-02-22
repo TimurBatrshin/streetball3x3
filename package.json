@@ -1,0 +1,70 @@
+{
+    "name": "streetball3x3",
+    "version": "0.1.0",
+    "private": true,
+    "homepage": "/streetball3x3",
+    "dependencies": {
+        "@brojs/cli": "^1.8.4",
+        "@chakra-ui/react": "^3.2.0",
+        "@eslint/js": "^9.11.0",
+        "@stylistic/eslint-plugin": "^2.8.0",
+        "@testing-library/dom": "^10.4.0",
+        "@testing-library/jest-dom": "^6.6.3",
+        "@testing-library/react": "^16.2.0",
+        "@testing-library/user-event": "^13.5.0",
+        "@types/node": "^20.17.6",
+        "@types/react": "^18.3.12",
+        "@types/react-dom": "^18.3.1",
+        "eslint": "^9.11.0",
+        "eslint-plugin-react": "^7.36.1",
+        "globals": "^15.9.0",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "react-scripts": "5.0.1",
+        "typescript-eslint": "^8.6.0",
+        "web-vitals": "^2.1.4"
+    },
+    "scripts": {
+        "start": "brojs server --port=3000 --with-open-browser",
+        "build": "npm run clean && brojs build --dev",
+        "test": "exit 0",
+        "eject": "react-scripts eject",
+        "build:prod": "npm run clean && brojs build",
+        "clean": "rimraf dist",
+        "eslint": "npx eslint ./src/**/*",
+        "eslint:fix": "npx eslint ./src/**/* --fix",
+        "_server": "node server.js"
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "main": "./src/index.tsx",
+    "devDependencies": {
+        "@emotion/react": "^11.14.0",
+        "@emotion/styled": "^11.14.0",
+        "axios": "^1.7.9",
+        "body-parser": "^1.20.3",
+        "cors": "^2.8.5",
+        "express": "^4.21.2",
+        "json-server": "^0.17.0",
+        "react-redux": "^9.2.0",
+        "react-router-dom": "^7.1.5",
+        "redux": "^5.0.1",
+        "redux-thunk": "^3.1.0"
+    }
+}
