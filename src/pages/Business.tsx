@@ -1,12 +1,17 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import ManageParticipantsScreen from './ManageParticipantsScreen';
+import SponsorSectionScreen from './SponsorSectionScreen';
 
-const Business = () => {
+const Stack = createStackNavigator();
+
+const BusinessScreen = () => {
   return (
-    <View>
-      <Text>Business Page</Text>
-    </View>
+    <Stack.Navigator>
+      <Stack.Screen name="Управление участниками" component={ManageParticipantsScreen} />
+      <Stack.Screen name="Раздел спонсоров" component={SponsorSectionScreen} />
+    </Stack.Navigator>
   );
 };
 
-export default Business;
+export default BusinessScreen;
