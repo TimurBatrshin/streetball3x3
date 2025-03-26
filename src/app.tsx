@@ -19,9 +19,7 @@ export default function App() {
             let iconName;
 
             if (route.name === 'Dashboard') {
-              iconName = focused
-                ? 'ios-information-circle'
-                : 'ios-information-circle-outline';
+              iconName = focused ? 'ios-information-circle' : 'ios-information-circle-outline';
             } else if (route.name === 'Profile') {
               iconName = focused ? 'ios-list-box' : 'ios-list';
             } else if (route.name === 'Tournaments') {
@@ -32,7 +30,6 @@ export default function App() {
               iconName = focused ? 'ios-business' : 'ios-business-outline';
             }
 
-            // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
           tabBarActiveTintColor: 'tomato',
