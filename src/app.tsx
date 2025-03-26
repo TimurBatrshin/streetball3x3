@@ -1,60 +1,50 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import styled from '@emotion/styled';
-import Home from './pages/Home';
-import Players from './pages/Players';
-import Tournaments from './pages/Tournaments';
-import TournamentDetails from './pages/TournamentDetails';
 import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
+import Dashboard from './dashboard';
+import Profile from './pages/Profile';
+import Tournaments from './pages/Tournaments';
+import Registration from './pages/Registration';
+import Business from './pages/Business';
 
-const AppContainer = styled.div`
-  font-family: sans-serif;
-  text-align: center;
-  padding-top: 20px;
-`;
+const Tab = createBottomTabNavigator();
 
-const Header = styled.header`
-  background-color: #007bff;
-  color: white;
-  padding: 20px;
-`;
-
-function App() {
+export default function App() {
   return (
-      <AppContainer>
-          <Header>
-              <h1>Мое 3x3 Приложение</h1>
-              <nav>
-                  <ul>
-                      <li><Link to="/">Главная</Link></li>
-                      <li><Link to="players">Игроки</Link></li>
-                      <li><Link to="tournaments">Турниры</Link></li>
-                  </ul>
-              </nav>
-          </Header>
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
 
-          {/* Используем BrowserRouter с базовым URL */}
-          <Router basename="/streetball3x3">
-              {/* Ваши маршруты */}
-              <Routes>
-                  {/* Путь "/" будет соответствовать "/streetball3x3/" */}
-                  <Route path="/" element={<Home />} />
-                  
-                  {/* Путь "players" будет соответствовать "/streetball3x3/players" */}
-                  <Route path="players" element={<Players />} />
-                  
-                  {/* Путь "tournaments" будет соответствовать "/streetball3x3/tournaments" */}
-                  <Route path="tournaments" element={<Tournaments />} />
-                  
-                  {/* Путь "tournaments/:id" будет соответствовать "/streetball3x3/tournaments/:id" */}
-                  <Route path="tournaments/:id" element={<TournamentDetails />} />
-                  <Route path="*" element={<div>Страница не найдена!</div>} />
-              </Routes>
+            if (route.name === 'Dashboard') {
+              iconName = focused
+                ? 'ios-information-circle'
+                : 'ios-information-circle-outline';
+            } else if (route.name === 'Profile') {
+              iconName = focused ? 'ios-list-box' : 'ios-list';
+            } else if (route.name === 'Tournaments') {
+              iconName = focused ? 'basketball' : 'basketball-outline';
+            } else if (route.name === 'Registration') {
+              iconName = focused ? 'ios-add-circle' : 'ios-add-circle-outline';
+            } else if (route.name === 'Business') {
+              iconName = focused ? 'ios-business' : 'ios-business-outline';
+            }
 
-          </Router>
-
-      </AppContainer>
-
+            // You can return any component that you like here!
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: 'tomato',
+          tabBarInactiveTintColor: 'gray',
+        })}
+      >
+        <Tab.Screen name="Dashboard" component={Dashboard} />
+        <Tab.Screen name="Profile" component={Profile} />
+        <Tab.Screen name="Tournaments" component={Tournaments} />
+        <Tab.Screen name="Registration" component={Registration} />
+        <Tab.Screen name="Business" component={Business} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
-
-export default App;

@@ -4,135 +4,141 @@ import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 
 const TournamentsContainer = styled.div`
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 5px rgba(0,0,0,0.1);
-    margin-top: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px rgba(0,0,0,0.1);
+  margin-top: 20px;
 `;
 
 const TournamentList = styled.ul`
-    list-style: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
 `;
 
 const TournamentItem = styled.li`
-    padding: 10px;
+  padding: 10px;
 `;
 
-// Форма регистрации
 const RegistrationForm = styled.form`
-display:flex; 
-flex-direction :column ; 
-align-items:center; 
-margin-top :20 px ;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
 `;
-    
-// Ввод данных
- const InputField=styled.input `
- padding :10 px ;  
- margin :5 px   O;  
- border-radius :5 px ;   
- border:l p x solid#ccc;   
- width:lOO%;  
- max-widthl300pX ;
- `;
-    
- // Кнопка отправки формы
- const ButtonStyled=styled.button `
- background-color:#007bff;   
- color:white;     
- padding:lO p x   lO p x   lO p X ;     
- border:none;      
- border-radius:l O PX     O PX     P X      P X       P XX        
- cursor:pointer       
- margin-toplO Px        
- `;
+
+const InputField = styled.input`
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-width: 300px;
+`;
+
+const ButtonStyled = styled.button`
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+`;
 
 class Tournaments extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            tournamentsData: [],
-            loadingStatus: true,
-            errorMessage: null,
-            name: '',
-            email: '',
-            selectedTournamentId: '',
-            registeredOnTournamentUsers:{}
-        };
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      tournamentsData: [],
+      loadingStatus: true,
+      errorMessage: null,
+      name: '',
+      email: '',
+      team: { player1: '', player2: '', player3: '', substitute: '' },
+      selectedTournamentId: '',
+      registeredOnTournamentUsers: {}
+    };
+  }
 
-    componentDidMount() {
-        axios.get('http://localhost:3004/api/tournaments')
-            .then(response => this.setState({ tournamentsData: response.data, loadingStatus: false }))
-            .catch(error => this.setState({ errorMessage: error.message, loadingStatus: false }));
+  componentDidMount() {
+    axios.get('http://localhost:3004/api/tournaments')
+      .then(response => this.setState({ tournamentsData: response.data, loadingStatus: false }))
+      .catch(error => this.setState({ errorMessage: error.message, loadingStatus: false }));
 
-        // Получите список зарегистрированных пользователей на каждый турнир
-        axios.get('http://localhost::3004/api/registrations-on-tournament')
-          .then(response => this.setState({ registeredOnTournamentUsers : response.data }))
-          .catch(error => console.error(error));
-            
-      };
+    axios.get('http://localhost:3004/api/registrations-on-tournament')
+      .then(response => this.setState({ registeredOnTournamentUsers: response.data }))
+      .catch(error => console.error(error));
+  }
 
-      handleNameChange = (event) => {
-          this.setState({ name : event.target.value });
-      };
+  handleNameChange = (event) => {
+    this.setState({ name: event.target.value });
+  };
 
-      handleEmailChange = (event) => {
-          this.setState({ email : event.target.value });
-      };
+  handleEmailChange = (event) => {
+    this.setState({ email: event.target.value });
+  };
 
-      handleSelectTournamentChange=(event)=>{
-          this.setState({selectedTournamentId:event.target.value});
+  handleTeamChange = (event) => {
+    const { name, value } = event.target;
+    this.setState(prevState => ({
+      team: {
+        ...prevState.team,
+        [name]: value
       }
+    }));
+  };
 
-     handleSubmitRegistrationOnTournament=(event)=>{
-         event.preventDefault();
-         try{
-             axios.post('http://localhost::3004/api/register-on-tournament',{tournamentId:this.state.selectedTournamentId,name:this.state.name,email:this.state.email})
-             .then(()=>{
-                 console.log("Зарегистрированы на турнир");
-                 // Обновите список зарегистрированных пользователей после успешной регистрации
-                 axios.get('http://localhost::3004/api/registrations-on-tournament')
-                     .then(response=>this.setState({registeredOnTournamentUsers: response.data}))
-                     .catch((error)=>console.error(error));
-             })
-             .catch((error)=>console.error(error));
-         }
-         catch(e){
-             console.error(e);
-         }
-     }
+  handleSelectTournamentChange = (event) => {
+    this.setState({ selectedTournamentId: event.target.value });
+  };
 
-     render(){
-        if(this.state.loadingStatus)return<div>Loading...</div>;
-        if(this.state.errorMessage)return<div>Error occurred</div>;
-        
-        return(
-        <TournamentsContainer>
+  handleSubmitRegistrationOnTournament = (event) => {
+    event.preventDefault();
+    const { selectedTournamentId, name, email, team } = this.state;
+    try {
+      axios.post('http://localhost:3004/api/register-on-tournament', { tournamentId: selectedTournamentId, name, email, team })
+        .then(() => {
+          console.log("Зарегистрированы на турнир");
+          axios.get('http://localhost:3004/api/registrations-on-tournament')
+            .then(response => this.setState({ registeredOnTournamentUsers: response.data }))
+            .catch(error => console.error(error));
+        })
+        .catch(error => console.error(error));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  render() {
+    if (this.state.loadingStatus) return <div>Loading...</div>;
+    if (this.state.errorMessage) return <div>Error occurred</div>;
+
+    return (
+      <TournamentsContainer>
         <h2>Турниры</h2>
-        <TournamentList>{this.state.tournamentsData.map(tourament=>
-        (<TournamentItem key={tourament.id}>
-        <Link to={`/tournaments/${tourament.id}`}>{tourament.name}</Link>
-        {/* Добавьте радиокнопку для выбора турнира */}
-        <input type="radio" value={tourament.id} onChange={this.handleSelectTournamentChange} />
-        {/* Отобразите список зарегистрированных пользователей */}
-        {this.state.registeredOnTournamentUsers[tourament.id]?.map(user=>
-        (<p key={user.email}>{user.name} ({user.email})</p>)
-        )}
-        </TournamentItem>)
-        )}</TournamentList>
-        
-        <RegistrationForm onSubmit={this.handleSubmitRegistrationOnTourney}>
-        <InputField type="text" value={this.state.name} onChange={this.handleNameChange} placeholder="Введите имя" />
-        <InputField type="email" value={this.state.email} onChange={this.handleEmailChange} placeholder="Введите email" />
-        
-        <ButtonStyled type="submit">Зарегестироваться на выбранный Турнир</ButtonStyled>
-        
+        <TournamentList>
+          {this.state.tournamentsData.map(tourament => (
+            <TournamentItem key={tourament.id}>
+              <Link to={`/tournaments/${tourament.id}`}>{tourament.name}</Link>
+              <input type="radio" value={tourament.id} onChange={this.handleSelectTournamentChange} />
+              {this.state.registeredOnTournamentUsers[tourament.id]?.map(user => (
+                <p key={user.email}>{user.name} ({user.email})</p>
+              ))}
+            </TournamentItem>
+          ))}
+        </TournamentList>
+        <RegistrationForm onSubmit={this.handleSubmitRegistrationOnTournament}>
+          <InputField type="text" value={this.state.name} onChange={this.handleNameChange} placeholder="Введите имя" />
+          <InputField type="email" value={this.state.email} onChange={this.handleEmailChange} placeholder="Введите email" />
+          <InputField type="text" name="player1" value={this.state.team.player1} onChange={this.handleTeamChange} placeholder="Игрок 1" />
+          <InputField type="text" name="player2" value={this.state.team.player2} onChange={this.handleTeamChange} placeholder="Игрок 2" />
+          <InputField type="text" name="player3" value={this.state.team.player3} onChange={this.handleTeamChange} placeholder="Игрок 3" />
+          <InputField type="text" name="substitute" value={this.state.team.substitute} onChange={this.handleTeamChange} placeholder="Запасной игрок" />
+          <ButtonStyled type="submit">Зарегистрироваться на выбранный Турнир</ButtonStyled>
         </RegistrationForm>
-        
-        </TournamentsContainer>);
-        };
-        };
-        
-        export default Tournaments;
+      </TournamentsContainer>
+    );
+  }
+}
+
+export default Tournaments;

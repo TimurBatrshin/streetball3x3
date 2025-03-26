@@ -10,7 +10,7 @@ const SponsorSectionScreen = () => {
   useEffect(() => {
     const fetchAdPackages = async () => {
       const querySnapshot = await getDocs(collection(db, 'adPackages'));
-      const packagesList = querySnapshot.docs.map(doc => doc.data());
+      const packagesList = querySnapshot.docs.map((doc) => doc.data());
       setAdPackages(packagesList);
     };
     fetchAdPackages();
@@ -22,10 +22,10 @@ const SponsorSectionScreen = () => {
 
   return (
     <View>
-      <Text>Place Banner</Text>
-      <TextInput placeholder="Banner URL" value={banner} onChangeText={setBanner} />
-      <Button title="Place" onPress={handlePlaceBanner} />
-      <Text>Advertising Packages</Text>
+      <Text>Разместить баннер</Text>
+      <TextInput placeholder="URL баннера" value={banner} onChangeText={setBanner} />
+      <Button title="Разместить" onPress={handlePlaceBanner} />
+      <Text>Рекламные пакеты</Text>
       <FlatList
         data={adPackages}
         keyExtractor={(item) => item.id}

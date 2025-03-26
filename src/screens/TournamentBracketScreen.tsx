@@ -12,7 +12,7 @@ const TournamentBracketScreen = () => {
     const fetchMatches = async () => {
       const q = query(collection(db, 'matches'), where('tournamentId', '==', route.params.id));
       const querySnapshot = await getDocs(q);
-      const matchesList = querySnapshot.docs.map(doc => doc.data());
+      const matchesList = querySnapshot.docs.map((doc) => doc.data());
       setMatches(matchesList);
     };
     fetchMatches();

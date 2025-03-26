@@ -43,16 +43,16 @@ const ProfileScreen = () => {
 
   return (
     <View>
-      <Text>Name:</Text>
+      <Text>Имя:</Text>
       <TextInput value={name} onChangeText={setName} />
-      <Text>Photo:</Text>
+      <Text>Фото:</Text>
       <input type="file" onChange={handleUploadPhoto} />
       {photo && <Image source={{ uri: photo }} style={{ width: 100, height: 100 }} />}
-      <Text>Statistics:</Text>
+      <Text>Статистика:</Text>
       <TextInput value={statistics} onChangeText={setStatistics} />
-      <Text>Game History:</Text>
+      <Text>История игр:</Text>
       <TextInput value={gameHistory} onChangeText={setGameHistory} />
-      <Button title="Save" onPress={handleSave} />
+      <Button title="Сохранить" onPress={handleSave} />
     </View>
   );
 };

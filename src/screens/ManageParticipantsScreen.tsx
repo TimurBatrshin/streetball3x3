@@ -12,7 +12,7 @@ const ManageParticipantsScreen = () => {
     const fetchParticipants = async () => {
       const q = query(collection(db, 'participants'), where('tournamentId', '==', route.params.id));
       const querySnapshot = await getDocs(q);
-      const participantsList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const participantsList = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setParticipants(participantsList);
     };
     fetchParticipants();
@@ -30,7 +30,7 @@ const ManageParticipantsScreen = () => {
 
   return (
     <View>
-      <Text>Manage Participants</Text>
+      <Text>Управление участниками</Text>
       <FlatList
         data={participants}
         keyExtractor={(item) => item.id}
@@ -38,8 +38,8 @@ const ManageParticipantsScreen = () => {
           <View>
             <Text>{item.name}</Text>
             <Text>{item.status}</Text>
-            <Button title="Approve" onPress={() => handleApprove(item.id)} />
-            <Button title="Reject" onPress={() => handleReject(item.id)} />
+            <Button title="Одобрить" onPress={() => handleApprove(item.id)} />
+            <Button title="Отклонить" onPress={() => handleReject(item.id)} />
           </View>
         )}
       />
