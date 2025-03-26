@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "react-app",
+    "react-app/jest",
+    "plugin:react-native/all",
+    "plugin:expo/all"
+  ],
+  "plugins": [
+    "react-native",
+    "expo"
+  ],
+  "rules": {
+    // Add any custom rules here
+  }
+}
