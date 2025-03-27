@@ -11,13 +11,13 @@ import Business from './pages/Business';
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  console.log(`App.js`);
+  console.log(`App.tsx`);
   return (
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
-            let iconName: keyof typeof Ionicons.glyphMap | undefined;
+            let iconName: 'information-circle' | 'information-circle-outline' | 'person' | 'person-outline' | 'basketball' | 'basketball-outline' | 'add-circle' | 'add-circle-outline' | 'business' | 'business-outline' | undefined;
 
             if (route.name === 'Dashboard') {
               iconName = focused ? 'information-circle' : 'information-circle-outline';
@@ -31,7 +31,7 @@ export default function App() {
               iconName = focused ? 'business' : 'business-outline';
             }
 
-            return <Ionicons name={iconName ?? 'information-circle-outline'} size={size} color={color} />;
+            return <Ionicons name={iconName as any} size={size} color={color} />;
           },
           tabBarActiveTintColor: 'tomato',
           tabBarInactiveTintColor: 'gray',
