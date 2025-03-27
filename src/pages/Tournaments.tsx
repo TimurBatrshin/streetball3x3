@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { getFirestore, collection, getDocs, query, where } from 'firebase/firestore';
 
-const TournamentsScreen = () => {
-  const [tournaments, setTournaments] = useState([]);
+interface Tournament {
+  id: string;
+  name: string;
+  date: string;
+  location: string;
+}
+
+const TournamentsScreen: React.FC = () => {
+  const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const [filter, setFilter] = useState('');
   const db = getFirestore();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<any>>();
 
   useEffect(() => {
     const fetchTournaments = async () => {
@@ -16,7 +23,7 @@ const TournamentsScreen = () => {
         q = query(q, where('level', '==', filter));
       }
       const querySnapshot = await getDocs(q);
-      const tournamentsList = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const tournamentsList: Tournament[] = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Tournament));
       setTournaments(tournamentsList);
     };
     fetchTournaments();

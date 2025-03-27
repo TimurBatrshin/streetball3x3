@@ -1,70 +1,60 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Button, FlatList, StyleSheet } from 'react-native';
-import { useRoute } from '@react-navigation/native';
-import { getFirestore, collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList } from 'react-native';
+import { useRoute, RouteProp } from '@react-navigation/native';
+import { db } from '../firebaseConfig';
+import { collection, getDocs, DocumentData } from 'firebase/firestore';
 
-const ManageParticipantsScreen = () => {
-  const route = useRoute();
-  const [participants, setParticipants] = useState([]);
-  const db = getFirestore();
+interface Participant {
+  id: string;
+  name: string;
+  status: string;
+}
 
+type RouteParams = {
+  params: {
+    id: string;
+  };
+};
+
+const ManageParticipantsScreen: React.FC = () => {
+  const route = useRoute<RouteProp<RouteParams, 'params'>>();
+  const [participants, setParticipants] = useState<Participant[]>([]);
+  
   useEffect(() => {
     const fetchParticipants = async () => {
-      const q = query(collection(db, 'participants'), where('tournamentId', '==', route.params.id));
-      const querySnapshot = await getDocs(q);
-      const participantsList = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      setParticipants(participantsList);
+      try {
+        const querySnapshot = await getDocs(collection(db, `tournaments/${route.params.id}/participants`));
+        const participantsList: Participant[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data() as Participant;
+          participantsList.push({ ...data, id: doc.id });
+        });
+        setParticipants(participantsList);
+      } catch (error) {
+        console.error('Error fetching participants:', error);
+      }
     };
-    fetchParticipants();
-  }, [route.params.id]);
 
-  const handleApprove = async (participantId) => {
-    const docRef = doc(db, 'participants', participantId);
-    await updateDoc(docRef, { status: 'approved' });
-  };
-
-  const handleReject = async (participantId) => {
-    const docRef = doc(db, 'participants', participantId);
-    await updateDoc(docRef, { status: 'rejected' });
-  };
+    if (route.params?.id) {
+      fetchParticipants();
+    }
+  }, [route.params?.id]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Управление участниками</Text>
+    <View>
+      <Text>Participants</Text>
       <FlatList
         data={participants}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Text style={styles.name}>{item.name}</Text>
+          <View>
+            <Text>{item.name}</Text>
             <Text>{item.status}</Text>
-            <Button title="Одобрить" onPress={() => handleApprove(item.id)} />
-            <Button title="Отклонить" onPress={() => handleReject(item.id)} />
           </View>
         )}
       />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  item: {
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  name: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-});
 
 export default ManageParticipantsScreen;

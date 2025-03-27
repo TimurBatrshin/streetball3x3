@@ -1,44 +1,46 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet } from 'react-native';
-import { getFirestore, collection, addDoc, getDocs } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { db } from '../firebaseConfig';
+import { collection, getDocs, DocumentData } from 'firebase/firestore';
 
-const SponsorSectionScreen = () => {
-  const [banner, setBanner] = useState('');
-  const [adPackages, setAdPackages] = useState([]);
-  const db = getFirestore();
+interface Sponsor {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+}
+
+const SponsorSectionScreen: React.FC = () => {
+  const [sponsors, setSponsors] = useState<Sponsor[]>([]);
 
   useEffect(() => {
-    const fetchAdPackages = async () => {
-      const querySnapshot = await getDocs(collection(db, 'adPackages'));
-      const packagesList = querySnapshot.docs.map((doc) => doc.data());
-      setAdPackages(packagesList);
+    const fetchSponsors = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'sponsors'));
+        const sponsorList: Sponsor[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data() as Sponsor;
+          sponsorList.push({ ...data, id: doc.id });
+        });
+        setSponsors(sponsorList);
+      } catch (error) {
+        console.error('Error fetching sponsors:', error);
+      }
     };
-    fetchAdPackages();
-  }, []);
 
-  const handlePlaceBanner = async () => {
-    await addDoc(collection(db, 'banners'), { banner });
-  };
+    fetchSponsors();
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Разместить баннер</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="URL баннера"
-        value={banner}
-        onChangeText={setBanner}
-      />
-      <Button title="Разместить" onPress={handlePlaceBanner} />
-      <Text style={styles.title}>Рекламные пакеты</Text>
       <FlatList
-        data={adPackages}
+        data={sponsors}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.item}>
             <Text style={styles.name}>{item.name}</Text>
-            <Text>{item.description}</Text>
-            <Text>{item.price}</Text>
+            <Text style={styles.description}>{item.description}</Text>
+            <Text style={styles.price}>{item.price}</Text>
           </View>
         )}
       />
@@ -48,27 +50,22 @@ const SponsorSectionScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: 20,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    marginBottom: 20,
   },
   item: {
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    marginBottom: 20,
   },
   name: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  description: {
+    fontSize: 16,
+  },
+  price: {
+    fontSize: 16,
+    color: 'grey',
   },
 });
 

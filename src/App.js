@@ -16,7 +16,7 @@ export default function App() {
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
-            let iconName: keyof typeof Ionicons.glyphMap = 'information-circle';
+            let iconName;
 
             if (route.name === 'Dashboard') {
               iconName = focused ? 'information-circle' : 'information-circle-outline';

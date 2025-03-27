@@ -5,8 +5,19 @@ import { db, storage } from '../firebaseConfig';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
-const ProfileScreen = () => {
-  const { user } = useAuth();
+interface User {
+  uid: string;
+}
+
+interface ProfileData {
+  name: string;
+  photo: string;
+  statistics: string;
+  gameHistory: string;
+}
+
+const ProfileScreen: React.FC = () => {
+  const { user } = useAuth() as { user: User };
   const [name, setName] = useState('');
   const [photo, setPhoto] = useState('');
   const [statistics, setStatistics] = useState('');
@@ -18,13 +29,13 @@ const ProfileScreen = () => {
         const docRef = doc(db, 'users', user.uid);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          const data = docSnap.data();
+          const data = docSnap.data() as ProfileData;
           setName(data.name);
           setPhoto(data.photo);
           setStatistics(data.statistics);
           setGameHistory(data.gameHistory);
         }
-      } catch (error) {
+      } catch (error: any) {
         Alert.alert('Error fetching profile:', error.message);
       }
     };
@@ -35,19 +46,21 @@ const ProfileScreen = () => {
     try {
       const docRef = doc(db, 'users', user.uid);
       await setDoc(docRef, { name, photo, statistics, gameHistory });
-    } catch (error) {
+    } catch (error: any) {
       Alert.alert('Error saving profile:', error.message);
     }
   };
 
-  const handleUploadPhoto = async (e) => {
+  const handleUploadPhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      const file = e.target.files[0];
-      const storageRef = ref(storage, `users/${user.uid}/profile.jpg`);
-      await uploadBytes(storageRef, file);
-      const photoURL = await getDownloadURL(storageRef);
-      setPhoto(photoURL);
-    } catch (error) {
+      const file = e.target.files?.[0];
+      if (file) {
+        const storageRef = ref(storage, `users/${user.uid}/profile.jpg`);
+        await uploadBytes(storageRef, file);
+        const photoURL = await getDownloadURL(storageRef);
+        setPhoto(photoURL);
+      }
+    } catch (error: any) {
       Alert.alert('Error uploading photo:', error.message);
     }
   };

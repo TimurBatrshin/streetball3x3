@@ -1,36 +1,61 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Button, FlatList } from 'react-native';
-import { useRoute } from '@react-navigation/native';
-import { getFirestore, collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, Button } from 'react-native';
+import { useRoute, RouteProp } from '@react-navigation/native';
+import { db } from '../firebaseConfig';
+import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
 
-const ManageParticipantsScreen = () => {
-  const route = useRoute();
-  const [participants, setParticipants] = useState([]);
-  const db = getFirestore();
+interface Participant {
+  id: string;
+  name: string;
+  status: string;
+}
+
+type RouteParams = {
+  params: {
+    id: string;
+  };
+};
+
+const ManageParticipantsScreen: React.FC = () => {
+  const route = useRoute<RouteProp<RouteParams, 'params'>>();
+  const [participants, setParticipants] = useState<Participant[]>([]);
 
   useEffect(() => {
     const fetchParticipants = async () => {
-      const q = query(collection(db, 'participants'), where('tournamentId', '==', route.params.id));
-      const querySnapshot = await getDocs(q);
-      const participantsList = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      setParticipants(participantsList);
+      try {
+        if (route.params?.id) {
+          const querySnapshot = await getDocs(collection(db, `tournaments/${route.params.id}/participants`));
+          const participantsList: Participant[] = [];
+          querySnapshot.forEach((doc) => {
+            const data = doc.data() as Participant;
+            participantsList.push({ ...data, id: doc.id });
+          });
+          setParticipants(participantsList);
+        }
+      } catch (error) {
+        console.error('Error fetching participants:', error);
+      }
     };
+
     fetchParticipants();
-  }, [route.params.id]);
+  }, [route.params?.id]);
 
-  const handleApprove = async (participantId) => {
-    const docRef = doc(db, 'participants', participantId);
-    await updateDoc(docRef, { status: 'approved' });
-  };
-
-  const handleReject = async (participantId) => {
-    const docRef = doc(db, 'participants', participantId);
-    await updateDoc(docRef, { status: 'rejected' });
+  const handleRemoveParticipant = async (participantId: string) => {
+    try {
+      if (route.params?.id) {
+        await deleteDoc(doc(db, `tournaments/${route.params.id}/participants`, participantId));
+        setParticipants((prevParticipants) =>
+          prevParticipants.filter((participant) => participant.id !== participantId)
+        );
+      }
+    } catch (error) {
+      console.error('Error removing participant:', error);
+    }
   };
 
   return (
     <View>
-      <Text>Управление участниками</Text>
+      <Text>Participants</Text>
       <FlatList
         data={participants}
         keyExtractor={(item) => item.id}
@@ -38,8 +63,7 @@ const ManageParticipantsScreen = () => {
           <View>
             <Text>{item.name}</Text>
             <Text>{item.status}</Text>
-            <Button title="Одобрить" onPress={() => handleApprove(item.id)} />
-            <Button title="Отклонить" onPress={() => handleReject(item.id)} />
+            <Button title="Remove" onPress={() => handleRemoveParticipant(item.id)} />
           </View>
         )}
       />
