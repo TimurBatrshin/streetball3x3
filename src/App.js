@@ -1,20 +1,18 @@
 import React from 'react';
-import './App.css';
-import JokeGenerator from './components/JokeGenerator';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import HomeScreen from './screens/HomeScreen';
+import OtherScreen from './screens/OtherScreen';
 
-function App() {
+const Stack = createStackNavigator();
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Random Joke Generator</h1>
-        <JokeGenerator />
-      </header>
-      <header className="App-header">
-        <h1>Digital Clock</h1>
-        <DigitalClock />
-      </header>
-    </div>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Other" component={OtherScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-export default App;
