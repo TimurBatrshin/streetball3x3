@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const crypto = require('crypto');
+const path = require('path'); // Добавьте эту строку
 
 function generateUUID() {
     return crypto.randomUUID();
@@ -23,7 +24,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 let playersData = [

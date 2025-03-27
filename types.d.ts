@@ -1,6 +1,9 @@
-declare module '*.svg' {
-  const src: string
-  export default src
-}
+declare module '*.png';
+declare module '*.jpg';
+declare module '*.jpeg';
+declare module '*.gif';
+declare module '*.svg';
+declare module '*.module.css';
+declare module '*.module.scss';
 
-declare const __webpack_public_path__: string
+declare var __webpack_public_path__: string;

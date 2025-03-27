@@ -1,31 +1,32 @@
-import React from 'react'
-import { ChakraProvider, createSystem, defaultConfig } from '@chakra-ui/react'
-import type { PropsWithChildren } from 'react'
+import { extendTheme, ChakraProvider, ThemeConfig } from '@chakra-ui/react';
+import { mode, GlobalStyleProps } from '@chakra-ui/theme-tools';
 
-const system = createSystem(defaultConfig, {
-  globalCss: {
-    body: {
-      colorPalette: 'teal',
-    },
-  },
-  theme: {
-    tokens: {
-      fonts: {
-        body: { value: 'var(--font-outfit)' },
-      },
-    },
-    semanticTokens: {
-      radii: {
-        l1: { value: '0.5rem' },
-        l2: { value: '0.75rem' },
-        l3: { value: '1rem' },
-      },
-    },
-  },
-})
+const config: ThemeConfig = {
+  initialColorMode: 'light',
+  useSystemColorMode: false,
+};
 
-export const Provider = (props: PropsWithChildren) => (
-  <ChakraProvider value={system}>
-    {props.children}
-  </ChakraProvider>
-)
+const customTheme = extendTheme({
+  config,
+  styles: {
+    global: (props: GlobalStyleProps) => ({
+      body: {
+        bg: mode('gray.100', 'gray.900')(props),
+      },
+    }),
+  },
+});
+
+interface ThemeProviderProps {
+  children: React.ReactNode;
+}
+
+const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
+  return (
+    <ChakraProvider theme={customTheme}>
+      {children}
+    </ChakraProvider>
+  );
+};
+
+export default ThemeProvider;
