@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, Alert, ScrollView } from 're
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 
 const RegistrationScreen = () => {
+  console.log(`RegistrationScreen.tsx`);
   const [teamName, setTeamName] = useState('');
   const [players, setPlayers] = useState([{ name: '', substitute: false }]);
   const db = getFirestore();

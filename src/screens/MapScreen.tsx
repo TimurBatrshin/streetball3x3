@@ -31,10 +31,10 @@ const MapScreen: React.FC = () => {
       <MapView style={styles.map}>
         {tournaments.map((tournament) => (
           <Marker
-            key={tournament.id}
             coordinate={{ latitude: tournament.location.lat, longitude: tournament.location.lng }}
             title={tournament.name}
             description={tournament.date}
+            key={tournament.id}
           />
         ))}
       </MapView>

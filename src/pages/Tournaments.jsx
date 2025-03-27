@@ -49,35 +49,40 @@ class Tournaments extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tournamentsData: [],
-      loadingStatus: true,
-      errorMessage: null,
-      name: '',
-      email: '',
-      team: { player1: '', player2: '', player3: '', substitute: '' },
-      selectedTournamentId: '',
-      registeredOnTournamentUsers: {}
+        tournamentsData: [],
+        loadingStatus: true,
+        errorMessage: null,
+        name: '',
+        email: '',
+        team: { player1: '', player2: '', player3: '', substitute: '' },
+        selectedTournamentId: '',
+        registeredOnTournamentUsers: {}
     };
   }
 
   componentDidMount() {
-    axios.get('http://localhost:3004/api/tournaments')
+    const tournamentsUrl = 'http://localhost:3004/api/tournaments';
+    const registrationsUrl = 'http://localhost:3004/api/registrations-on-tournament';
+
+    console.log(`Requesting tournaments from ${tournamentsUrl}`);
+    axios.get(tournamentsUrl)
       .then(response => this.setState({ tournamentsData: response.data, loadingStatus: false }))
       .catch(error => this.setState({ errorMessage: error.message, loadingStatus: false }));
 
-    axios.get('http://localhost:3004/api/registrations-on-tournament')
+    console.log(`Requesting registrations on tournament from ${registrationsUrl}`);
+    axios.get(registrationsUrl)
       .then(response => this.setState({ registeredOnTournamentUsers: response.data }))
-      .catch(error => console.error(error));
+      .catch(error => console.error(`Error fetching registrations on tournament: ${error}`));
   }
 
   handleNameChange = (event) => {
     this.setState({ name: event.target.value });
   };
-
+  
   handleEmailChange = (event) => {
     this.setState({ email: event.target.value });
   };
-
+  
   handleTeamChange = (event) => {
     const { name, value } = event.target;
     this.setState(prevState => ({
@@ -87,25 +92,28 @@ class Tournaments extends Component {
       }
     }));
   };
-
+  
   handleSelectTournamentChange = (event) => {
     this.setState({ selectedTournamentId: event.target.value });
   };
-
+  
   handleSubmitRegistrationOnTournament = (event) => {
     event.preventDefault();
     const { selectedTournamentId, name, email, team } = this.state;
+    const registerTournamentUrl = 'http://localhost:3004/api/register-on-tournament';
+
+    console.log(`Registering on tournament at ${registerTournamentUrl}`);
     try {
-      axios.post('http://localhost:3004/api/register-on-tournament', { tournamentId: selectedTournamentId, name, email, team })
+      axios.post(registerTournamentUrl, { tournamentId: selectedTournamentId, name, email, team })
         .then(() => {
           console.log("Зарегистрированы на турнир");
           axios.get('http://localhost:3004/api/registrations-on-tournament')
             .then(response => this.setState({ registeredOnTournamentUsers: response.data }))
-            .catch(error => console.error(error));
+            .catch(error => console.error(`Error fetching registrations on tournament after registration: ${error}`));
         })
-        .catch(error => console.error(error));
+        .catch(error => console.error(`Error registering on tournament: ${error}`));
     } catch (e) {
-      console.error(e);
+      console.error(`Error in try-catch registering on tournament: ${e}`);
     }
   };
 

@@ -26,7 +26,10 @@
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "config": {
+        "index": "./src/pages/Profile.html"
+      }
     },
     "notification": {
       "icon": "./assets/icon.png",

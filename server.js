@@ -8,17 +8,22 @@ function generateUUID() {
 
 const app = express();
 
-// Middleware для проверки корректности URL
-app.use((req, res, next) => {
+const decodeURIComponentSafe = (encodedURI) => {
   try {
-    decodeURI(req.url);
-    next();
+    return decodeURIComponent(encodedURI);
   } catch (e) {
-    res.status(400).send('Malformed URI');
+    console.error('URI malformed', e);
+    return encodedURI;
   }
+};
+
+// Middleware для проверки корректности URL с логированием
+app.use((req, res, next) => {
+  req.url = decodeURIComponentSafe(req.url);
+  next();
 });
 
-app.use(express.json());
+app.use(express.static(path.join(__dirname, 'dist')));
 app.use(cors());
 
 let playersData = [

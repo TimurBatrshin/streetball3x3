@@ -11,6 +11,7 @@ import Business from './pages/Business';
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  console.log(`App.js`);
   return (
     <NavigationContainer>
       <Tab.Navigator

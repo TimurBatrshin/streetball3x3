@@ -1,8 +1,6 @@
 import React from 'react'
-import { ChakraProvider as ChacraProv, createSystem, defaultConfig } from '@chakra-ui/react'
+import { ChakraProvider, createSystem, defaultConfig } from '@chakra-ui/react'
 import type { PropsWithChildren } from 'react'
-
-const ChacraProvider: React.ElementType = ChacraProv
 
 const system = createSystem(defaultConfig, {
   globalCss: {
@@ -27,7 +25,7 @@ const system = createSystem(defaultConfig, {
 })
 
 export const Provider = (props: PropsWithChildren) => (
-  <ChacraProvider value={system}>
+  <ChakraProvider value={system}>
     {props.children}
-  </ChacraProvider>
+  </ChakraProvider>
 )

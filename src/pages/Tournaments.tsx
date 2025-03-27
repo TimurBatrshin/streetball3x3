@@ -11,6 +11,7 @@ interface Tournament {
 }
 
 const TournamentsScreen: React.FC = () => {
+  console.log(`Tournaments.tsx`);
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const [filter, setFilter] = useState('');
   const db = getFirestore();

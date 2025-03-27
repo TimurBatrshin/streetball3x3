@@ -36,7 +36,7 @@ const TournamentBracketScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       {matches.map((match, index) => (
-        <View key={index} style={styles.match}>
+        <View style={styles.match} key={index}>
           <Text>{match.team1} vs {match.team2}</Text>
           <Text>{match.score1} - {match.score2}</Text>
         </View>
