@@ -2,7 +2,7 @@
   "name": "streetball-tournament-app",
   "version": "1.0.0",
   "private": true,
-  "main": "src/app.tsx",
+  "main": "src/index.js",
   "scripts": {
     "start": "npx expo start --web",
     "android": "expo start --android",
@@ -22,6 +22,7 @@
     "@react-native-firebase/functions": "18.9.0",
     "@react-native-firebase/messaging": "18.9.0",
     "@react-native-firebase/storage": "18.9.0",
+    "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/native": "^6.1.8",
     "@react-navigation/stack": "^6.3.1",
     "axios": "^1.8.0",
@@ -50,6 +51,7 @@
     "@babel/preset-react": "^7.24.5",
     "@types/react": "~18.2.0",
     "@types/react-native": "~0.73.0",
+    "@types/webpack-env": "^1.18.8",
     "typescript": "^5.5.0"
   },
   "expo": {

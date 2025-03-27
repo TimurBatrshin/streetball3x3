@@ -16,18 +16,18 @@ export default function App() {
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+            let iconName: keyof typeof Ionicons.glyphMap = 'information-circle';
 
             if (route.name === 'Dashboard') {
-              iconName = focused ? 'ios-information-circle' : 'ios-information-circle-outline';
+              iconName = focused ? 'information-circle' : 'information-circle-outline';
             } else if (route.name === 'Profile') {
-              iconName = focused ? 'ios-person' : 'ios-person-outline';
+              iconName = focused ? 'person' : 'person-outline';
             } else if (route.name === 'Tournaments') {
-              iconName = focused ? 'ios-basketball' : 'ios-basketball-outline';
+              iconName = focused ? 'basketball' : 'basketball-outline';
             } else if (route.name === 'Registration') {
-              iconName = focused ? 'ios-add-circle' : 'ios-add-circle-outline';
+              iconName = focused ? 'add-circle' : 'add-circle-outline';
             } else if (route.name === 'Business') {
-              iconName = focused ? 'ios-business' : 'ios-business-outline';
+              iconName = focused ? 'business' : 'business-outline';
             }
 
             return <Ionicons name={iconName} size={size} color={color} />;
