@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, FlatList } from 'react-native';
+import { View, Text, Button, FlatList, StyleSheet } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { getFirestore, collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
 
@@ -29,14 +29,14 @@ const ManageParticipantsScreen = () => {
   };
 
   return (
-    <View>
-      <Text>Управление участниками</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Управление участниками</Text>
       <FlatList
         data={participants}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View>
-            <Text>{item.name}</Text>
+          <View style={styles.item}>
+            <Text style={styles.name}>{item.name}</Text>
             <Text>{item.status}</Text>
             <Button title="Одобрить" onPress={() => handleApprove(item.id)} />
             <Button title="Отклонить" onPress={() => handleReject(item.id)} />
@@ -46,5 +46,25 @@ const ManageParticipantsScreen = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  item: {
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  name: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
 
 export default ManageParticipantsScreen;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 
@@ -24,8 +24,8 @@ const TournamentDetailsScreen = () => {
   }
 
   return (
-    <View>
-      <Text>Название: {tournament.name}</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Название: {tournament.name}</Text>
       <Text>Дата: {tournament.date}</Text>
       <Text>Время: {tournament.time}</Text>
       <Text>Место: {tournament.location}</Text>
@@ -36,5 +36,16 @@ const TournamentDetailsScreen = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+});
 
 export default TournamentDetailsScreen;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, FlatList } from 'react-native';
+import { View, Text, TextInput, Button, FlatList, StyleSheet } from 'react-native';
 import { getFirestore, collection, addDoc, getDocs } from 'firebase/firestore';
 
 const SponsorSectionScreen = () => {
@@ -21,17 +21,22 @@ const SponsorSectionScreen = () => {
   };
 
   return (
-    <View>
-      <Text>Разместить баннер</Text>
-      <TextInput placeholder="URL баннера" value={banner} onChangeText={setBanner} />
+    <View style={styles.container}>
+      <Text style={styles.title}>Разместить баннер</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="URL баннера"
+        value={banner}
+        onChangeText={setBanner}
+      />
       <Button title="Разместить" onPress={handlePlaceBanner} />
-      <Text>Рекламные пакеты</Text>
+      <Text style={styles.title}>Рекламные пакеты</Text>
       <FlatList
         data={adPackages}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View>
-            <Text>{item.name}</Text>
+          <View style={styles.item}>
+            <Text style={styles.name}>{item.name}</Text>
             <Text>{item.description}</Text>
             <Text>{item.price}</Text>
           </View>
@@ -40,5 +45,31 @@ const SponsorSectionScreen = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    marginBottom: 20,
+  },
+  item: {
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  name: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
 
 export default SponsorSectionScreen;

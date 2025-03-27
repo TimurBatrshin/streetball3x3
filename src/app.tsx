@@ -21,9 +21,9 @@ export default function App() {
             if (route.name === 'Dashboard') {
               iconName = focused ? 'ios-information-circle' : 'ios-information-circle-outline';
             } else if (route.name === 'Profile') {
-              iconName = focused ? 'ios-list-box' : 'ios-list';
+              iconName = focused ? 'ios-person' : 'ios-person-outline';
             } else if (route.name === 'Tournaments') {
-              iconName = focused ? 'basketball' : 'basketball-outline';
+              iconName = focused ? 'ios-basketball' : 'ios-basketball-outline';
             } else if (route.name === 'Registration') {
               iconName = focused ? 'ios-add-circle' : 'ios-add-circle-outline';
             } else if (route.name === 'Business') {
