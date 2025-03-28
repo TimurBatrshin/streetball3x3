@@ -1,12 +1,11 @@
 import React from 'react';
-import { View, Text } from 'react-native';
 
 const Tournaments = () => {
   return (
-    <View>
-      <Text>Tournaments</Text>
-    </View>
+    <div>
+      Tournaments
+    </div>
   );
-};
+}
 
 export default Tournaments;

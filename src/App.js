@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -49,6 +48,4 @@ const App = () => {
   );
 };
 
-// Рендер в DOM
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
+export default App;
